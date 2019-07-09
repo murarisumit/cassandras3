@@ -60,7 +60,7 @@ cassandras3 view --keyspace test --hostname test --bucket test [--region us-east
 
 ##### For some s3 compatible endpoint
 ```
-cassandras3 view --bucket test --keyspace clenet1 --s3endpoint https://sgp1.digitaloceanspaces.com --region sgp1 --hostname 'cassandra-seed'
+cassandras3 view --bucket test --keyspace test --s3endpoint https://sgp1.digitaloceanspaces.com --region sgp1 --hostname 'cassandra-seed'
 
 ```
 

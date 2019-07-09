@@ -24,9 +24,9 @@ def view_cmd():  # pragma: no cover
               help='The hostname to use for viewing backups.')
 @click.option('--bucket', prompt='Your s3 bucket to view from',
               help='The s3 bucket used to fetch the view from.')
-@click.option('--s3endpoint', default='',
-        help='Override S3 endpoint for s3 compatible services')
-@click.option('--loglevel',
+@click.option( '--s3endpoint', default='',
+              help='Override S3 endpoint for s3 compatible services')
+@click.option( '--loglevel',
         type=click.Choice(['NOTSET', 'DEBUG', 'INFO','WARNING', 'ERROR', 'CRITICAL']),
         default='WARNING', help='Set log level for application')
 
