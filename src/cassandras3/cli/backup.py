@@ -21,6 +21,8 @@ def backup_cmd():  # pragma: no cover
         help='Select the region for your bucket.')
 @click.option('--host', default='127.0.0.1',
         help='Address of the cassandra host')
+@click.option('--hostname', default='',
+        help='Name of host, used in naming backup dir in s3')
 @click.option('--port', default='7199',
         help='Port of the cassandra host')
 @click.option('--keyspace', prompt='Your keyspace to backup',
@@ -43,17 +45,20 @@ def backup_cmd():  # pragma: no cover
         default='WARNING', help='Set log level for application')
 
 
-def backup(host, port, keyspace, datadir, jmxusername, jmxpassword,
+def backup(host, hostname, port, keyspace, datadir, jmxusername, jmxpassword,
          region, bucket, kmskeyid, s3endpoint, loglevel):  # pragma: no cover
-    do_backup(host, port, keyspace, datadir, jmxusername, jmxpassword, region, bucket, kmskeyid, s3endpoint, loglevel)
+    do_backup(host, hostname, port, keyspace, datadir, jmxusername, jmxpassword, region, bucket, kmskeyid, s3endpoint, loglevel)
 
 
-def do_backup(host, port, keyspace, datadir, jmxusername, jmxpassword,
+def do_backup(host, hostname, port, keyspace, datadir, jmxusername, jmxpassword,
               region, bucket, kmskeyid, s3endpoint, loglevel):
     setup_logging(logging.getLevelName(loglevel))
     clients = ClientCache(region, s3endpoint)
-    hostname = socket.gethostname()
+    if not hostname:
+        logger.critical("Not hostname given, using default hostname")
+        hostname = socket.gethostname()
 
+    logger.info('Hostname is : ' + hostname)
     timestamp = time.strftime("%Z-%Y-%m-%d-%H:%M:%S", time.localtime())
 
     node = NodeTool(clients, hostname, host, port, datadir, jmxusername, jmxpassword, kmskeyid)
