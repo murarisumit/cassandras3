@@ -124,7 +124,7 @@ class NodeTool(object):
         try:
             sh.mkdir('-p', '%s/%s/%s' % (self.cassandra_data_dir, keyspace, table))
         except:
-            logger.warning('Could not create directory!')
+            logger.error('Could not create directory!')
 
     def _lookup_snapshots(self, tag):
         logger.debug('Searching for snapshots with tag: {} '.format(tag))
@@ -134,7 +134,7 @@ class NodeTool(object):
                            tag)
             logger.debug('Found directory: {}'.format(dirs))
         except:
-            logger.warning('Unable to execute find, nodetool did not create snapshot?')
+            logger.error('Unable to execute find, nodetool did not create snapshot?')
             dirs = ''
 
         return dirs.splitlines()
@@ -148,7 +148,7 @@ class NodeTool(object):
             else:
                 output = sh.nodetool('-h', self.host, '-p', self.port, 'snapshot', '-t', tag, keyspace)
 
-            logger.error('Snapshot returned with status code {}'.format(output.exit_code))
+            logger.debug('Snapshot returned with status code {}'.format(output.exit_code))
         except:
             logger.error('Command possibly unfinished due to errors!')
             raise
