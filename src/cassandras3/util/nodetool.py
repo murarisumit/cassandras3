@@ -1,6 +1,7 @@
 import logging
 import os
 import sh
+import time
 
 from botocore.exceptions import ClientError
 
@@ -152,6 +153,8 @@ class NodeTool(object):
                 logger.debug('Executing: nodetool -h %s -p %s snapshot -t %s %s', self.host, self.port, tag, keyspace)
                 output = sh.nodetool('-h', self.host, '-p', self.port, 'snapshot', '-t', tag, keyspace)
             logger.debug('Snapshot returned with status code {}'.format(output.exit_code))
+            logger.info('Adding Delay of 5 sec for completion')
+            time.sleep(5)
         except:
             logger.error('Command possibly unfinished due to errors!')
             raise
