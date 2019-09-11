@@ -129,6 +129,7 @@ class NodeTool(object):
     def _lookup_snapshots(self, tag):
         logger.debug('Searching for snapshots with tag: {} '.format(tag))
         try:
+            logger.debug('Executing: %s -name %s', self.cassandra_data_dir, tag)
             dirs = sh.find(self.cassandra_data_dir,
                            '-name',
                            tag)
@@ -143,11 +144,13 @@ class NodeTool(object):
         logger.debug('Taking snapshot for {0} keyspace with tag: {1}'.format(keyspace, tag))
         try:
             if self.jmxusername and self.jmxpassword:
+                logger.debug('Executing: nodetool -u %s -pw %s -h %s -p %s snapshot -t %s %s',
+                        self.jmxusername, self.jmxpassword, self.host, self.port, tag, keyspace)
                 output = sh.nodetool('-u', self.jmxusername, '-pw', self.jmxpassword,
                             '-h', self.host, '-p', self.port, 'snapshot', '-t', tag, keyspace)
             else:
+                logger.debug('Executing: nodetool -h %s -p %s snapshot -t %s %s', self.host, self.port, tag, keyspace)
                 output = sh.nodetool('-h', self.host, '-p', self.port, 'snapshot', '-t', tag, keyspace)
-
             logger.debug('Snapshot returned with status code {}'.format(output.exit_code))
         except:
             logger.error('Command possibly unfinished due to errors!')
@@ -157,9 +160,12 @@ class NodeTool(object):
         try:
             logger.debug('Clearing snapshots for {} keyspace and {} tag'.format(keyspace, tag))
             if self.jmxusername and self.jmxpassword:
+                logger.debug('Executing: nodetool -u %s -pw %s -h %s -p %s clearsnapshot -t %s %s',
+                        self.jmxusername, self.jmxpassword, self.host, self.port, tag, keyspace)
                 sh.nodetool('-u', self.jmxusername, '-pw', self.jmxpassword,
                             '-h', self.host, '-p', self.port, 'clearsnapshot', '-t', tag, keyspace)
             else:
+                logger.debug('Executing: nodetool -h %s -p %s clearsnapshot -t %s %s', self.host, self.port, tag, keyspace)
                 sh.nodetool('-h', self.host, '-p', self.port, 'clearsnapshot', '-t', tag, keyspace)
         except:
             logger.error('Command possibly unfinished due to errors!')
