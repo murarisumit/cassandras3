@@ -86,7 +86,7 @@ class NodeTool(object):
                 for key in view_objects.get('CommonPrefixes'):  # pragma: no cover
                     print(key.get('Prefix').split('/')[-2])
         except:
-            logger.error('Failed to perform the s3 request!')
+            logger.exception('Failed to perform the s3 request!')
             raise
 
     def _folders(self, bucket, prefix=''):
@@ -125,7 +125,7 @@ class NodeTool(object):
         try:
             sh.mkdir('-p', '%s/%s/%s' % (self.cassandra_data_dir, keyspace, table))
         except:
-            logger.error('Could not create directory!')
+            logger.exception('Could not create directory!')
 
     def _lookup_snapshots(self, tag):
         logger.debug('Searching for snapshots with tag: {} '.format(tag))
@@ -136,7 +136,7 @@ class NodeTool(object):
                            tag)
             logger.debug('Found directory: {}'.format(dirs))
         except:
-            logger.error('Unable to execute find, nodetool did not create snapshot?')
+            logger.exception('Unable to execute find, nodetool did not create snapshot?')
             dirs = ''
 
         return dirs.splitlines()
@@ -156,7 +156,7 @@ class NodeTool(object):
             logger.info('Adding Delay of 5 sec for completion')
             time.sleep(5)
         except:
-            logger.error('Command possibly unfinished due to errors!')
+            logger.exception('Command possibly unfinished due to errors!')
             raise
 
     def _clearsnapshot(self, keyspace, tag):
@@ -171,7 +171,7 @@ class NodeTool(object):
                 logger.debug('Executing: nodetool -h %s -p %s clearsnapshot -t %s %s', self.host, self.port, tag, keyspace)
                 sh.nodetool('-h', self.host, '-p', self.port, 'clearsnapshot', '-t', tag, keyspace)
         except:
-            logger.error('Command possibly unfinished due to errors!')
+            logger.exception('Command possibly unfinished due to errors!')
             raise
 
     def _refresh(self, keyspace, table):
@@ -183,5 +183,5 @@ class NodeTool(object):
             else:
                 sh.nodetool('-h', self.host, '-p', self.port, 'refresh', keyspace, table)
         except:
-            logger.error('Command possibly unfinished due to errors!')
+            logger.exception('Command possibly unfinished due to errors!')
             raise
