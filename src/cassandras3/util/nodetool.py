@@ -1,6 +1,7 @@
 import logging
 import os
 import sh
+import sys
 import time
 
 from botocore.exceptions import ClientError
@@ -137,6 +138,7 @@ class NodeTool(object):
             logger.debug('Found directory: {}'.format(dirs))
         except:
             logger.exception('Unable to execute find, nodetool did not create snapshot?')
+            sys.exit(1)
             dirs = ''
 
         return dirs.splitlines()
@@ -157,6 +159,7 @@ class NodeTool(object):
             time.sleep(5)
         except:
             logger.exception('Command possibly unfinished due to errors!')
+            sys.exit(1)
             raise
 
     def _clearsnapshot(self, keyspace, tag):
@@ -172,6 +175,7 @@ class NodeTool(object):
                 sh.nodetool('-h', self.host, '-p', self.port, 'clearsnapshot', '-t', tag, keyspace)
         except:
             logger.exception('Command possibly unfinished due to errors!')
+            sys.exit(1)
             raise
 
     def _refresh(self, keyspace, table):
@@ -184,4 +188,5 @@ class NodeTool(object):
                 sh.nodetool('-h', self.host, '-p', self.port, 'refresh', keyspace, table)
         except:
             logger.exception('Command possibly unfinished due to errors!')
+            sys.exit(1)
             raise
