@@ -65,7 +65,6 @@ class NodeTool(object):
         tables = []
         for filename in list(list_objects):
             table = filename.split('/')[:-1][-1]
-
             if table not in tables:
                 self._ensure_dir(keyspace, table)
                 tables.append(table)
@@ -115,10 +114,11 @@ class NodeTool(object):
             logger.error('Failed in uploading file')
 
     def _download_file(self, bucket, filename, keyspace, table):
+        # Downloading file to custom location
         key = filename.split('/')[-1]
         self.s3.download_file(bucket,
                 filename,
-                '%s/%s/%s/%s' % (self.cassandra_data_dir, keyspace, table, key),
+                '%s/%s/%s/%s' % (self.cassandra_data_dir + 'cluster_snapshots', keyspace, table, key),
                 ExtraArgs=self._s3_extra_args())
 
     def _ensure_dir(self, keyspace, table):
