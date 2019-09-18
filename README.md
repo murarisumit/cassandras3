@@ -78,7 +78,7 @@ cassandras3 restore --backup backup-timestamp --hostname test --keyspace test --
 
 ##### For some s3 compatible endpoint
 ```
-cassandras3 restore --backup 'UTC-2019-06-26-16:28:26' --keyspace test --bucket test --s3endpoint https://sgp1.digitaloceanspaces.com --region sgp1 --datadir /usr/local/var/lib/cassandra/data/ --hostname 'cassandra-seed' --loglevel DEBUG
+cassandras3 restore --backup 'UTC-2019-06-26-16:28:26' --keyspace test --bucket test --s3endpoint https://sgp1.digitaloceanspaces.com --region sgp1 --datadir /data/cassandra/data/ --hostname 'cassandra-seed' --loglevel DEBUG
 ```
 
 Note: `backup-timestamp` can be retrieved via `cassandras3 view`.

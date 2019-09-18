@@ -115,16 +115,18 @@ class NodeTool(object):
 
     def _download_file(self, bucket, filename, keyspace, table):
         # Downloading file to custom location
+        cluster_snapshot = self.cassandra_data_dir + 'cluster_snapshots'
         key = filename.split('/')[-1]
         self.s3.download_file(bucket,
                 filename,
-                '%s/%s/%s/%s' % (self.cassandra_data_dir + 'cluster_snapshots', keyspace, table, key),
+                '%s/%s/%s/%s' % (cluster_snapshot, keyspace, table, key),
                 ExtraArgs=self._s3_extra_args())
 
     def _ensure_dir(self, keyspace, table):
-        logger.debug('Ensuring directory {}/{}/{} exists'.format(self.cassandra_data_dir, keyspace, table))
+        cluster_snapshot = self.cassandra_data_dir + 'cluster_snapshots'
+        logger.debug('Ensuring directory {}/{}/{} exists'.format(cluster_snapshot, keyspace, table))
         try:
-            sh.mkdir('-p', '%s/%s/%s' % (self.cassandra_data_dir, keyspace, table))
+            sh.mkdir('-p', '%s/%s/%s' % (cluster_snapshot, keyspace, table))
         except:
             logger.exception('Could not create directory!')
 

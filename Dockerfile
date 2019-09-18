@@ -1,4 +1,4 @@
-FROM cassandra:2
+FROM cassandra:3
 
 COPY requirements.txt /app/requirements.txt
 
